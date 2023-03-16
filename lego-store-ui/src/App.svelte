@@ -1,6 +1,6 @@
 <script lang="ts">
-  import LoginPage from './pages/LoginPage.svelte';
-  import RegisterPage from './pages/RegisterPage.svelte';
+  import { Router } from "@roxi/routify"
+  import { routes } from "../.routify/routes";
 </script>
 
 <svelte:head>
@@ -8,8 +8,7 @@
 </svelte:head>
 
 <main>
-  <!-- <LoginPage/> -->
-  <RegisterPage/>
+  <Router {routes}/>
 </main>
 
 <style>
