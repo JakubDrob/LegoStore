@@ -40,7 +40,6 @@ CREATE TABLE `Set` (
 
 CREATE TABLE `ShoppingCart` (
   `ShoppingCartID` Int AUTO_INCREMENT,
-  `ShoppingCart_Item` varchar(50),
   `ShippingCost` Int,
   `NumberOfItems` Int,
   `TotalPrice` Int,
@@ -78,7 +77,8 @@ CREATE TABLE `ShoppingCart_Product` (
   PRIMARY KEY (`ShoppingCartProductID`),
   FOREIGN KEY (`ShoppingCartID`) REFERENCES `ShoppingCart`(`ShoppingCartID`),
   FOREIGN KEY (`ProductID`) REFERENCES `Product`(`ProductID`),
-  FOREIGN KEY (`SetID`) REFERENCES `Set`(`SetID`)
+  FOREIGN KEY (`SetID`) REFERENCES `Set`(`SetID`),
+  CHECK (`ProductID` IS NOT NULL OR `SetID` IS NOT NULL)
 );
 
 CREATE TABLE `Set_Product` (
