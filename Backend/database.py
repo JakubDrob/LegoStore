@@ -20,9 +20,17 @@ def get_products():
     result = cursor.fetchall()
     converted_result = []
     for row in result:
-        converted_row = list(row)
-        converted_row[7] = datetime.datetime.strftime(row[7], "%Y-%m-%d")
-        converted_result.append(converted_row)
+        dict_row = {'id': row[0],
+                    'name': row[1],
+                    'set_no': row[2],
+                    'price': row[3],
+                    'description': row[4],
+                    'image': row[5],
+                    'availability': row[6],
+                    'release_date': datetime.datetime.strftime(row[7], "%Y-%m-%d"),
+                    'piece_count': row[8],
+                    'product_type_id': row[9]}
+        converted_result.append(dict_row)
     return converted_result
 
 def get_sets():
@@ -41,9 +49,14 @@ def create_user(username, password):
 def get_user_by_id(user_id):
 
     cursor.execute(f"SELECT * FROM user WHERE userId = {user_id}")
-    user = cursor.fetchone()
-    #cursor.close()
-    return user
+    row = cursor.fetchone()
+    result = {'id': row[0],
+              'username': row[1],
+              'email': row[2],
+              'password': row[3],
+              'shopping_cart_id': row[4],
+              'address_id': row[5]}
+    return result
 
 def get_user_by_username(username):
 
