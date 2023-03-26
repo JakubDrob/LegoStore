@@ -4,7 +4,7 @@
 
 <main>
   <div class="login-form">
-    <Card>
+    <Card class="mx-auto">
       <h4 class="text-2xl font-bold mb-6 text-center">Logowanie</h4>
       <div class="flex flex-col ">
         <div class="mb-6">
