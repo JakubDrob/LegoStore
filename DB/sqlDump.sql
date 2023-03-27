@@ -61,7 +61,7 @@ CREATE TABLE `BuyingHistory` (
   PRIMARY KEY (`BuyingHistoryID`),
   KEY `UserID` (`UserID`),
   CONSTRAINT `buyinghistory_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `BuyingHistory` (
 
 LOCK TABLES `BuyingHistory` WRITE;
 /*!40000 ALTER TABLE `BuyingHistory` DISABLE KEYS */;
-INSERT INTO `BuyingHistory` VALUES (1,1,1,'2022-03-18');
+INSERT INTO `BuyingHistory` VALUES (1,1,1,'2022-03-18'),(2,1,1,'2022-03-18');
 /*!40000 ALTER TABLE `BuyingHistory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +87,7 @@ CREATE TABLE `Product` (
   `SetNo` varchar(50) DEFAULT NULL,
   `Price` varchar(50) DEFAULT NULL,
   `Description` varchar(250) DEFAULT NULL,
-  `Image` blob,
+  `ImagePath` varchar(255) DEFAULT NULL,
   `Availability` int DEFAULT NULL,
   `ReleaseDate` date DEFAULT NULL,
   `PieceCount` int DEFAULT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE `Product` (
   PRIMARY KEY (`ProductID`),
   KEY `ProductTypeID` (`ProductTypeID`),
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`ProductTypeID`) REFERENCES `ProductType` (`ProductTypeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `Product` (
 
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
-INSERT INTO `Product` VALUES (1,'Police Station','60141','99.99','Build a bustling police station with LEGO City!',NULL,1,'2020-01-01',1000,1),(2,'Temple of the Ultimate Ultimate Weapon','70617','79.99','Join the ninja heroes at the Temple of the Ultimate Ultimate Weapon!',NULL,1,'2017-01-01',1400,2);
+INSERT INTO `Product` VALUES (1,'Police Station','60141','99.99','Build a bustling police station with LEGO City!','1.webp',1,'2020-01-01',1000,1),(2,'Temple of the Ultimate Ultimate Weapon','70617','79.99','Join the ninja heroes at the Temple of the Ultimate Ultimate Weapon!','1.webp',1,'2017-01-01',1400,2),(4,'LEGO Set 1','12345','19.99','A great LEGO set for kids!','1.webp',10,'2022-01-01',100,1);
 /*!40000 ALTER TABLE `Product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,4 +287,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-18 12:45:23
+-- Dump completed on 2023-03-27 18:24:55
