@@ -7,7 +7,7 @@
 	<title>Lego Store</title>
 </svelte:head>
 
-<main class="w-full">
+<main class="w-full h-full">
   <Router {routes}/>
 </main>
 

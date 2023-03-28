@@ -2,7 +2,7 @@
   import { Button, Card, Input, Label } from "flowbite-svelte";
 </script>
 
-<main>
+<main class="flex justify-center items-center">
   <div class="login-form">
     <Card class="mx-auto">
       <h4 class="text-2xl font-bold mb-6 text-center">Rejestracja</h4>
