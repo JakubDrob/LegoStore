@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Card } from "flowbite-svelte";
     import type { Product } from "../../lib/models";
     import ProductItem from "../../lib/ProductItem.svelte";
 
@@ -38,14 +37,8 @@
 
 </script>
 
-<main class="grid gap-8 lg:grid-cols-3 w-full justify-items-center">
+<main class="grid gap-8 lg:grid-cols-3 w-full justify-items-center p-4">
     {#each items as item}
         <ProductItem product={item} />
     {/each}
 </main>
-
-<style scoped>
-    /* main{
-        max-width: 1000px;
-    } */
-</style>
