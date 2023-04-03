@@ -98,3 +98,13 @@ CREATE TABLE `BuyingHistory` (
   PRIMARY KEY (`BuyingHistoryID`),
   FOREIGN KEY (`UserID`) REFERENCES `User`(`UserID`)
 );
+
+
+ALTER TABLE Product CHANGE Image ImagePath varchar(255);
+
+INSERT INTO Product (Name, SetNo, Price, Description, ImagePath, Availability, ReleaseDate, PieceCount, ProductTypeID) 
+VALUES ('LEGO Set 1', '12345', '19.99', 'A great LEGO set for kids!', '1.webp', 10, '2022-01-01', 100, 1);
+
+UPDATE Product SET ImagePath = '1.webp' WHERE productid = 1;
+UPDATE Product SET ImagePath = '1.webp' WHERE productid = 2;
+UPDATE Product SET ImagePath = '1.webp' WHERE productid = 4;
