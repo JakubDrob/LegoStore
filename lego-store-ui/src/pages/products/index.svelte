@@ -1,44 +1,28 @@
 <script lang="ts">
+    import { Card } from "flowbite-svelte";
     import type { Product } from "../../lib/models";
     import ProductItem from "../../lib/ProductItem.svelte";
+    import { getProducts } from "../../lib/services";
 
-    const items: Product[] = [
-        {
-            title: "Lego product 1 ale to jest dłuższe niż normalnie",
-            imgUrl: "1.webp",
-            price: 5.50,
-            id: "nfwjfw"
-        },
-        {
-            title: "Lego product 2",
-            imgUrl: "2.webp",
-            price: 7.30,
-            id: "ada"
-        },
-        {
-            title: "Lego product 3",
-            imgUrl: "3.webp",
-            price: 9.10,
-            id: "gffff"
-        },
-        {
-            title: "Lego product 3",
-            imgUrl: "3.webp",
-            price: 3.30,
-            id: "adadafff"
-        },
-        {
-            title: "Lego product 3",
-            imgUrl: "3.webp",
-            price: 2.10,
-            id: "fwhfwnf"
-        }
-    ]
+    let products: Product[] = [];
+
+    getProducts()
+    .then(x => {
+        // temporary until image will be available from backend
+        x.forEach(item => item.imgUrl = "2.webp"); 
+        products = x;
+    })
 
 </script>
 
-<main class="grid gap-8 lg:grid-cols-3 w-full justify-items-center p-4">
-    {#each items as item}
+<main class="grid gap-8 lg:grid-cols-3 w-full justify-items-center">
+    {#each products as item}
         <ProductItem product={item} />
     {/each}
 </main>
+
+<style scoped>
+    /* main{
+        max-width: 1000px;
+    } */
+</style>
