@@ -11,7 +11,7 @@
         <img class="p-8" src={product.imgUrl} alt="product 1" />
     </div>
     <div>
-        <div>{product.title}</div>
+        <div>{product.name}</div>
         <div class="py-2">
             <span class="font-bold">{product.price} zł</span>
         </div>
