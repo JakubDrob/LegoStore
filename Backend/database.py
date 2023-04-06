@@ -25,7 +25,7 @@ def get_products():
                     'set_no': row[2],
                     'price': row[3],
                     'description': row[4],
-                    'image_path': "/static/images/" + row[5] if row[5] is not None else "",
+                    'image_path': "/static/" + row[5] if row[5] is not None else "",
                     'availability': row[6],
                     'release_date': datetime.datetime.strftime(row[7], "%Y-%m-%d"),
                     'piece_count': row[8],
