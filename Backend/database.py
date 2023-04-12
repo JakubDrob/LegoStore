@@ -39,9 +39,9 @@ def get_sets():
     result = cursor.fetchall()
     return result
 
-def create_user(username, password):
-    query = "INSERT INTO User (username, password) VALUES (%s, %s)"
-    values = (username, password)
+def create_user(email, password):
+    query = "INSERT INTO User (email, password) VALUES (%s, %s)"
+    values = (email, password)
     cursor.execute(query, values)
     db.commit()
     return cursor.lastrowid
@@ -58,9 +58,9 @@ def get_user_by_id(user_id):
               'address_id': row[5]}
     return result
 
-def get_user_by_username(username):
+def get_user_by_email(email):
 
-    cursor.execute(f"SELECT * FROM user WHERE username = '{username}'")
+    cursor.execute(f"SELECT * FROM user WHERE email = '{email}'")
     user = cursor.fetchone()
     #cursor.close()
     return user

@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from database import get_user_by_id, get_user_by_username, add_user, update_user, delete_user
+from database import get_user_by_id, get_user_by_email, add_user, update_user, delete_user
 import os
 from datetime import datetime, timedelta, timezone
 import jwt
@@ -22,7 +22,7 @@ class User(Resource):
         args = parser.parse_args()
 
         # Check if username already exists
-        user = get_user_by_username(args['username'])
+        user = get_user_by_email(args['username'])
         if user:
             return {'message': 'Username already exists'}, 409
 
