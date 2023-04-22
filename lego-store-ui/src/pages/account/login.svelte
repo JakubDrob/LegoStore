@@ -110,7 +110,7 @@ const { form, handleChange, handleSubmit } = createForm({
 <main class="flex justify-center items-center page-body">
   <div class="login-form">
     <Card class="mx-auto">
-      <h4 class="text-2xl font-bold mb-6 text-center">Login</h4>
+      <h4 class="text-2xl font-bold mb-6 text-center">Logowanie</h4>
       <div class="flex flex-col ">
         <div class="mb-6">
           <Label for="default-input" class="block mb-2">Email</Label>
@@ -126,7 +126,7 @@ const { form, handleChange, handleSubmit } = createForm({
           {/if}
         </div>
         <div class="mb-6">
-          <Label class="block mb-2">Password</Label>
+          <Label class="block mb-2">Hasło</Label>
           <Input 
             id="password" 
             placeholder="password" 
@@ -137,8 +137,8 @@ const { form, handleChange, handleSubmit } = createForm({
           <p class="text-xs font-bold text-red-600">{formErrors.password}</p>
           {/if}
         </div>
-        <Button class="text-center w-2/3 self-center" color="dark" on:click={()=>{handleSubmit()}}
-          >Log in</Button
+        <Button class="text-center w-2/3 self-center" color="blue" on:click={()=>{handleSubmit()}}
+          >Zaloguj się</Button
         >
       </div>
     </Card>

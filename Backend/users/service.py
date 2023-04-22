@@ -15,6 +15,7 @@ from users.validation import (
 from utils.http_code import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from flask import jsonify
 
 SQLALCHEMY_DATABASE_URI="mysql://root:asfalt12@localhost/lego_store"
 

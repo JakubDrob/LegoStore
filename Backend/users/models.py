@@ -19,7 +19,6 @@ class User(db.Model):
         The function takes in a dictionary of keyword arguments and assigns the values to the class
         attributes
         """
-        self.username = kwargs.get("username")
         self.email = kwargs.get("email")
         self.password = kwargs.get("password")
 
@@ -29,7 +28,7 @@ class User(db.Model):
         The __repr__ function is used to return a string representation of the object
         :return: The username of the user.
         """
-        return "<User {}>".format(self.username)
+        return "<User {}>".format(self.email)
 
     def hash_password(self):
         """
@@ -71,7 +70,7 @@ class Product(db.Model):
     Availability = db.Column(db.Integer, nullable=False)
     ReleaseDate = db.Column(db.Date, nullable=False)
     PieceCount = db.Column(db.Integer, nullable=False)
-    ProductTypeID = db.Column(db.Integer, db.ForeignKey('product_type.ProductTypeID'))
+    ProductTypeID = db.Column(db.Integer, db.ForeignKey('product_type.ProductTypeID'), nullable=False)
 
     def __init__(self, **kwargs):
         self.Name = kwargs.get("Name")
@@ -137,9 +136,9 @@ class Address(db.Model):
     Country = db.Column(db.String(50))
     City = db.Column(db.String(50))
     StreetName = db.Column(db.String(50))
-    StreetNo = db.Column(db.Integer)
+    StreetNo = db.Column(db.String(10))
     AppartmentNo = db.Column(db.String(10))
-    PostCode = db.Column(db.Integer)
+    PostCode = db.Column(db.String(10))
 
     def __init__(self, **kwargs):
         """
