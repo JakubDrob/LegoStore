@@ -1,8 +1,35 @@
+# Development
+
+#### Working with venv:
+
+```shell
+cd Backend
+
+python -m venv venv # create environment
+
+# activate your environment
+venv\Scripts\activate
+# or
+vnev\bin\activate
+
+pip install -r requirements.txt # install dependencies
+```
+
+#### Running flask:
+```shell
+# inside venv
+flask --app server run
+```
+#### Development server for frontend:
+```shell
+pnpm dev
+```
+
 # Running
 
 Run MySQL instance:
 
-```
+```shell
 docker run --name mysql -d `
     -p 3306:3306 `
     -e MYSQL_ROOT_PASSWORD=change-me `
