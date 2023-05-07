@@ -7,12 +7,12 @@
     <Navbar let:hidden let:toggle>
         <NavBrand href="/">
           <img
-            src="https://flowbite.com/docs/images/logo.svg"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/LEGO_logo.svg/2048px-LEGO_logo.svg.png"
             class="mr-3 h-6 sm:h-9"
-            alt="Flowbite Logo"
+            alt="Lego Logo"
           />
-          <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            Flowbite
+          <span class="self-center whitespace-nowrap text-3xl font-semibold text-yellow-300 dark:text-white">
+            Lego Store
           </span>
         </NavBrand>
         <NavHamburger on:click={toggle} />

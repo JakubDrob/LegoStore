@@ -11,15 +11,24 @@
         items: [
             {
                 productId: 1,
-                title: "Batman",
+                title: "Lego Nintendo",
                 quantity: 3,
+                image:"1.webp",
                 price: 55.55
             },
             {
                 productId: 2,
-                title: "Superman",
-                quantity: 3,
-                price: 55.55
+                title: "Lego restauracja Ramen",
+                quantity: 1,
+                image:"restaurant.webp",
+                price: 89.99
+            },
+            {
+                productId: 3,
+                title: "Lego sklep surferski",
+                quantity: 1,
+                image:"surfStore.webp",
+                price: 39.99
             },
         ],
     };
@@ -40,7 +49,7 @@
                 <h5 class="text-xl font-bold">Twój Koszyk:</h5>
                 <Listgroup items={cart.items} let:item class="border-0 dark:!bg-transparent">
                     <div class="w-full flex">
-                        <Avatar src="/2.webp" alt="" size="lg" rounded class="flex-shrink-0"/>
+                        <Avatar src="/{item.image}" alt="" size="lg" rounded class="flex-shrink-0"/>
                         <div class="flex w-full justify-between items-center">
                             <div class="flex flex-col justify-center mx-5 gap-2">
                                 <h5>{item.title}</h5>
