@@ -36,3 +36,7 @@ docker run --name mysql -d `
     --restart unless-stopped `
     mysql:8
 ```
+
+# Resources
+
+Flask-Migrate - https://flask-migrate.readthedocs.io/en/latest/
