@@ -9,6 +9,9 @@ from sqlalchemy.orm import sessionmaker
 from users.models import User
 from database import db
 from flask_cors import CORS
+from config import Config
+from flask_migrate import Migrate
+
 
 #db = SQLAlchemy()
 mail = Mail()
@@ -27,6 +30,9 @@ def create_app():
     app.config["MAIL_USE_TLS"] = False
     app.config["MAIL_USE_SSL"] = True
 
+    # Configuration for db
+    app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+
     mail = Mail(app)
 
     app.config.from_object("config.Config")
@@ -39,9 +45,11 @@ def create_app():
     #
     db.init_app(app)
 
+    migrate = Migrate(app, db)
+
     with app.app_context():
 
-        db.create_all()  # Create database tables for our data models
+        # db.create_all()  # Create database tables for our data models
 
         return app
 
