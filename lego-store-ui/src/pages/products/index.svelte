@@ -9,20 +9,27 @@
     getProducts()
     .then(x => {
         // temporary until image will be available from backend
-        x.forEach(item => item.imgUrl = "2.webp"); 
+        // x.forEach(item => item.imgUrl = "2.webp"); 
+        console.log(x)
         products = x;
+        console.log(products)
+        console.log(products[0].image_path)
     })
 
 </script>
 
-<main class="grid gap-8 lg:grid-cols-3 w-full justify-items-center">
+<main class="grid gap-8 lg:grid-cols-3 w-full pt-5 justify-items-center page-body">
     {#each products as item}
         <ProductItem product={item} />
     {/each}
 </main>
 
-<style scoped>
-    /* main{
-        max-width: 1000px;
-    } */
-</style>
+
+<style>
+    .page-body {
+      background-image:  url('../../assets/background.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
+  

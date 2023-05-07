@@ -4,7 +4,7 @@ import datetime
 from database import db
 from os import environ
 from users.helper import send_forgot_password_email
-from users.models import User
+from users.models import *
 from flask_bcrypt import generate_password_hash
 from utils.common import generate_response, TokenGenerator
 from users.validation import (
@@ -131,3 +131,96 @@ def get_user_by_id(user_id):
     user_dicts.pop('_sa_instance_state', None)
     session.close()
     return user_dicts
+
+def get_user_address(user_email):
+    user = User.query.filter_by(email=user_email).first()
+
+    print(user.Address)
+    if user is None or user.Address is None:
+        
+        return generate_response(
+        message="User has no address saved", status=HTTP_404_NOT_FOUND
+    )
+    
+    print(user)
+    print(user.Address)
+
+    user_address_id = user.Address
+    user_address = Address.query.filter_by(AddressID=user_address_id).first()
+    print(type(user_address))
+    print(type(user_email))
+    json_address = {
+        "FirstName": user_address.FirstName,
+        "LastName": user_address.LastName,
+        "Country": user_address.Country,
+        "City": user_address.City,
+        "StreetName": user_address.StreetName,
+        "StreetNo": user_address.StreetNo,
+        "AppartmentNo": user_address.AppartmentNo,
+        "PostCode": user_address.PostCode
+    }
+    
+    return generate_response(
+    data=json_address, message="User address found", status=HTTP_202_ACCEPTED)
+        
+def save_user_address(input_data):
+        
+        user_email = input_data.get("Email")
+        del input_data["Email"]
+
+        #Find user with this emial
+        user = User.query.filter_by(email=user_email).first()
+        print(user.Userid)
+
+        if(user.Address is None):
+            print("[save_user_address] there is no address to be deleted")
+        else:
+            #Find current address saved in db and delete it
+            oldAddress = Address.query.filter_by(AddressID=user.Address).first()
+            db.session.delete(oldAddress)
+            db.session.commit()
+            #Delete also address from user
+            user.Address = None
+            db.session.commit()
+
+
+        #Save to DB new address
+        new_user_address = Address()  # Create an instance of the User class
+        new_user_address = Address()
+        new_user_address.FirstName = input_data.get("FirstName")
+        new_user_address.LastName = input_data.get("LastName")
+        new_user_address.StreetName = input_data.get("StreetName")
+        new_user_address.StreetNo = input_data.get("StreetNo")
+        new_user_address.AppartmentNo = input_data.get("AppartmentNo")
+        new_user_address.PostCode = input_data.get("PostCode")
+        new_user_address.City = input_data.get("City")
+        new_user_address.Country = input_data.get("Country")
+
+        print(new_user_address)
+
+        db.session.add(new_user_address)  # Adds new User record to database
+        db.session.commit()  # Comment
+
+        last_address = Address.query.order_by(Address.AddressID.desc()).first()
+
+        #connect address to the user
+        user.Address = last_address.AddressID
+        db.session.commit()
+
+def get_products():
+
+    result =  Product.query.all()
+    converted_result = []
+    for row in result:
+        dict_row = {'id': row.ProductID,
+                    'name': row.Name,
+                    'set_no': row.SetNo,
+                    'price': row.Price,
+                    'description': row.Description,
+                    'image_path': row.ImagePath if row.ImagePath is not None else "",
+                    'availability': row.Availability,
+                    'release_date': datetime.datetime.strftime(row.ReleaseDate, "%Y-%m-%d"),
+                    'piece_count': row.PieceCount,
+                    'product_type_id': row.ProductTypeID}
+        converted_result.append(dict_row)
+    return converted_result

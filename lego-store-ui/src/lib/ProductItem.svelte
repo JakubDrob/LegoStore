@@ -8,7 +8,7 @@
 
 <Card class="w-full">
     <div class="img-wrapper">
-        <img class="p-8" src={product.imgUrl} alt="product 1" />
+        <img class="p-8" src={product.image_path} alt="product 1" />
     </div>
     <div>
         <div>{product.name}</div>

@@ -1,7 +1,10 @@
 from flask import Response
 from flask_restful import Resource
 from flask import request, make_response
-from users.service import create_user, reset_password_email_send, login_user, reset_password, get_user_by_id
+from users.service import *
+from utils.common import generate_response, TokenGenerator
+from users.models import User
+
 
 class SignUpApi(Resource):
     @staticmethod
@@ -59,3 +62,29 @@ class ShowUser(Resource):
             return {'user': user}, 200
         else:
             return {'message': 'User not found'}, 404
+        
+class GetAddress(Resource):
+    @staticmethod
+    def post():
+        input_data = request.get_json()
+        print(input_data)
+
+        return get_user_address(input_data)
+
+class SaveAddress(Resource):
+    @staticmethod
+    def post():
+        input_data = request.get_json()
+        print(input_data)
+
+        # delete from input_data email that is in the end of the json, 
+        # then create address in table and use email to connect it to the user
+        #function save_user_address in service.py
+
+        return save_user_address(input_data)
+
+class GetProducts(Resource):
+    @staticmethod
+    def get():
+        products = get_products()
+        return {'products': products}, 200

@@ -71,7 +71,7 @@ class Product(db.Model):
     Availability = db.Column(db.Integer, nullable=False)
     ReleaseDate = db.Column(db.Date, nullable=False)
     PieceCount = db.Column(db.Integer, nullable=False)
-    ProductTypeID = db.Column(db.Integer, db.ForeignKey('product_type.ProductTypeID'), nullable=False)
+    ProductTypeID = db.Column(db.Integer, db.ForeignKey('product_type.ProductTypeID'))
 
     def __init__(self, **kwargs):
         self.Name = kwargs.get("Name")
