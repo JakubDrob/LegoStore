@@ -51,7 +51,7 @@ const { form, handleChange, handleSubmit } = createForm({
     if((!formErrors.email) && (!formErrors.password))
     { 
       // alert(JSON.stringify(values));
-      fetch("http://127.0.0.1:5000/login", {
+      fetch("http://127.0.0.1:5000/api/auth/login/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -61,9 +61,9 @@ const { form, handleChange, handleSubmit } = createForm({
       .then(response => {
         if (!response.ok) {
           if (response.status === 401) {
-          formErrors.password = "Incorrect password";
-          document.getElementById("password").className = errorBorder;
-          } else if (response.status === 403) {
+            formErrors.password = "Incorrect password";
+            document.getElementById("password").className = errorBorder;
+          } else if (response.status === 404) {
             formErrors.email = "User with this email does not exists";
             document.getElementById("email").className = errorBorder;
           } 
@@ -75,12 +75,18 @@ const { form, handleChange, handleSubmit } = createForm({
       })
       .then(data => {
         console.log('Success:', data);
-        const jwt = data.user['token'];
+        const jwt = data.data['token'];
+        const responseEmail = data.data['email'];
 
         // Save the token to httpOnly cookie
         setCookie('jwt', jwt, {
           path: '/',
           maxAge: 3600, // set the expiration time for the cookie in seconds
+          httpOnly: true
+        });
+
+        setCookie('email', responseEmail, {
+          path: '/',
           httpOnly: true
         });
 

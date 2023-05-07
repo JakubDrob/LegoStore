@@ -29,7 +29,7 @@ CREATE TABLE `Set` (
   `SetNo` varchar(50),
   `Price` varchar(50),
   `Description` varchar(250),
-  `Image` BLOB,
+  `ImagePath` varchar(255);
   `Availibility` Int,
   `UnitsSold` Int,
   `ReleaseDate` Date,

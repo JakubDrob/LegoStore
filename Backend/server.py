@@ -3,7 +3,6 @@
 import os
 from flask import Flask, jsonify
 from flask_restful import Api
-#from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -11,12 +10,8 @@ from users.models import User
 from database import db
 from flask_cors import CORS
 
-#just for testing
-SQLALCHEMY_DATABASE_URI="mysql://root:asfalt12@localhost/lego_store"
-
 #db = SQLAlchemy()
 mail = Mail()
-
 
 def create_app():
     """Construct the core application."""
@@ -47,24 +42,6 @@ def create_app():
     with app.app_context():
 
         db.create_all()  # Create database tables for our data models
-
-        # just for testing till seasion close() including it
-        # new_user = User(username='slodziakfghh', email='email2fg2hh', password = "fsgfdfsdhh")  # Create an instance of the User class
-        #
-        # db.session.add(new_user)  # Adds new User record to database
-        #
-        # db.session.commit()  # Commits all changes
-
-        # engine = create_engine(SQLALCHEMY_DATABASE_URI)
-        # Session = sessionmaker(bind=engine)
-        # session = Session()
-
-        # query the User table and retrieve all rows
-        # users = User.query.all()
-        # iterate over the users and print their usernames
-        # print(users)
-        # close the session
-        # session.close()
 
         return app
 

@@ -28,7 +28,7 @@
       { 
         delete values.confirmPassword;
         // alert(JSON.stringify(values));
-        fetch("http://127.0.0.1:5000/register", {
+        fetch("http://127.0.0.1:5000/api/auth/register/", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -37,9 +37,10 @@
         })
         .then(response => {
           if (!response.ok) {
-            if(response.status === 409){
+            if(response.status === 400){
               response.json().then(data => {
-                formErrors.email = data.msg;
+                formErrors.email = data.message;
+                console.log(data);
               });
               document.getElementById("email").className = errorBorder;
             }
