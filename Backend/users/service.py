@@ -16,8 +16,7 @@ from utils.http_code import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import jsonify
-
-SQLALCHEMY_DATABASE_URI="mysql://root:asfalt12@localhost/lego_store"
+from config import Config
 
 def create_user(request, input_data):
     """
@@ -124,7 +123,7 @@ def reset_password(request, input_data, token):
 
 
 def get_user_by_id(user_id):
-    engine = create_engine(SQLALCHEMY_DATABASE_URI)
+    engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
     Session = sessionmaker(bind=engine)
     session = Session()
     users = User.query.filter_by(Userid=user_id).first()
