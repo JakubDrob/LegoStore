@@ -129,7 +129,7 @@
 <main class="flex justify-center items-center page-body">
   <div class="login-form">
     <Card class="mx-auto">
-      <h4 class="text-2xl font-bold mb-6 text-center">Sign Up</h4>
+      <h4 class="text-2xl font-bold mb-6 text-center">Rejestracja</h4>
       <div class="flex flex-col ">
         <div class="mb-6">
           <Label for="default-input" class="block mb-2">Email</Label>
@@ -145,7 +145,7 @@
           {/if}
         </div>
         <div class="mb-6">
-          <Label for="default-input" class="block mb-2">Password</Label>
+          <Label for="default-input" class="block mb-2">Hasło</Label>
           <Input 
             id="password" 
             placeholder="password" 
@@ -157,7 +157,7 @@
             {/if}
         </div>
         <div class="mb-6">
-          <Label  id="confirmedPass-label" for="default-input" class="block mb-2">Confirm password</Label>
+          <Label  id="confirmedPass-label" for="default-input" class="block mb-2">Powtórz hasło</Label>
           <Input 
             id="confirmPassword" 
             placeholder="confirm password" 
@@ -168,7 +168,7 @@
           <p class="text-xs font-bold text-red-600">{formErrors.confirmPassword}</p>
           {/if}
         </div>
-        <Button id="registerBtn" class="text-center w-2/3 self-center" color="dark" on:click={()=>{handleSubmit()}}>Sign Up</Button>
+        <Button id="registerBtn" class="text-center w-2/3 self-center" color="blue" on:click={()=>{handleSubmit()}}>Zarejestruj się</Button>
       </div>
     </Card>
   </div>
