@@ -51,7 +51,7 @@ const { form, handleChange, handleSubmit } = createForm({
     if((!formErrors.email) && (!formErrors.password))
     { 
       // alert(JSON.stringify(values));
-      fetch("http://127.0.0.1:5000/login", {
+      fetch("http://127.0.0.1:5000/api/auth/login/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -61,9 +61,9 @@ const { form, handleChange, handleSubmit } = createForm({
       .then(response => {
         if (!response.ok) {
           if (response.status === 401) {
-          formErrors.password = "Incorrect password";
-          document.getElementById("password").className = errorBorder;
-          } else if (response.status === 403) {
+            formErrors.password = "Incorrect password";
+            document.getElementById("password").className = errorBorder;
+          } else if (response.status === 404) {
             formErrors.email = "User with this email does not exists";
             document.getElementById("email").className = errorBorder;
           } 
@@ -75,12 +75,19 @@ const { form, handleChange, handleSubmit } = createForm({
       })
       .then(data => {
         console.log('Success:', data);
-        const jwt = data.user['token'];
+        // console.log(data)
+        const jwt = data.data['token'];
+        const responseEmail = data.data['email'];
 
         // Save the token to httpOnly cookie
         setCookie('jwt', jwt, {
           path: '/',
           maxAge: 3600, // set the expiration time for the cookie in seconds
+          httpOnly: true
+        });
+
+        setCookie('email', responseEmail, {
+          path: '/',
           httpOnly: true
         });
 
@@ -104,7 +111,7 @@ const { form, handleChange, handleSubmit } = createForm({
 <main class="flex justify-center items-center page-body">
   <div class="login-form">
     <Card class="mx-auto">
-      <h4 class="text-2xl font-bold mb-6 text-center">Login</h4>
+      <h4 class="text-2xl font-bold mb-6 text-center">Logowanie</h4>
       <div class="flex flex-col ">
         <div class="mb-6">
           <Label for="default-input" class="block mb-2">Email</Label>
@@ -120,7 +127,7 @@ const { form, handleChange, handleSubmit } = createForm({
           {/if}
         </div>
         <div class="mb-6">
-          <Label class="block mb-2">Password</Label>
+          <Label class="block mb-2">Hasło</Label>
           <Input 
             id="password" 
             placeholder="password" 
@@ -131,8 +138,8 @@ const { form, handleChange, handleSubmit } = createForm({
           <p class="text-xs font-bold text-red-600">{formErrors.password}</p>
           {/if}
         </div>
-        <Button class="text-center w-2/3 self-center" color="dark" on:click={()=>{handleSubmit()}}
-          >Log in</Button
+        <Button class="text-center w-2/3 self-center" color="blue" on:click={()=>{handleSubmit()}}
+          >Zaloguj się</Button
         >
       </div>
     </Card>

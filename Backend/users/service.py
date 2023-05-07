@@ -4,7 +4,7 @@ import datetime
 from database import db
 from os import environ
 from users.helper import send_forgot_password_email
-from users.models import User
+from users.models import User, Address
 from flask_bcrypt import generate_password_hash
 from utils.common import generate_response, TokenGenerator
 from users.validation import (
@@ -12,9 +12,10 @@ from users.validation import (
     CreateResetPasswordEmailSendInputSchema,
     CreateSignupInputSchema, ResetPasswordInputSchema,
 )
-from utils.http_code import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from utils.http_code import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from flask import jsonify
 
 SQLALCHEMY_DATABASE_URI="mysql://root:asfalt12@localhost/lego_store"
 
@@ -25,19 +26,9 @@ def create_user(request, input_data):
     :param input_data: This is the data that is passed to the function
     :return: A response object
     """
-    create_validation_schema = CreateSignupInputSchema()
-    errors = create_validation_schema.validate(input_data)
-    if errors:
-        return generate_response(message=errors)
-    check_username_exist = User.query.filter_by(
-        username=input_data.get("username")
-    ).first()
+
     check_email_exist = User.query.filter_by(email=input_data.get("email")).first()
-    if check_username_exist:
-        return generate_response(
-            message="Username already exist", status=HTTP_400_BAD_REQUEST
-        )
-    elif check_email_exist:
+    if check_email_exist:
         return generate_response(
             message="Email  already taken", status=HTTP_400_BAD_REQUEST
         )
@@ -54,26 +45,21 @@ def create_user(request, input_data):
 
 def login_user(request, input_data):
     """
-    It takes in a request and input data, validates the input data, checks if the user exists, checks if
+    It checks if the user exists, checks if
     the password is correct, and returns a response
     :param request: The request object
     :param input_data: The data that is passed to the function
     :return: A dictionary with the keys: data, message, status
     """
-    create_validation_schema = CreateLoginInputSchema()
-    errors = create_validation_schema.validate(input_data)
-    if errors:
-        return generate_response(message=errors)
 
     get_user = User.query.filter_by(email=input_data.get("email")).first()
     if get_user is None:
-        return generate_response(message="User not found", status=HTTP_400_BAD_REQUEST)
+        return generate_response(message="User not found", status=HTTP_404_NOT_FOUND)
     if get_user.check_password(input_data.get("password")):
         token = jwt.encode(
             {
                 "Userid": get_user.Userid,
                 "email": get_user.email,
-                "username": get_user.username,
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
             },
             environ.get("SECRET_KEY"),
@@ -84,7 +70,7 @@ def login_user(request, input_data):
         )
     else:
         return generate_response(
-            message="Password is wrong", status=HTTP_400_BAD_REQUEST
+            message="Password is wrong", status=HTTP_401_UNAUTHORIZED
         )
 
 
@@ -146,3 +132,98 @@ def get_user_by_id(user_id):
     user_dicts.pop('_sa_instance_state', None)
     session.close()
     return user_dicts
+
+def get_user_address(user_email):
+    user = User.query.filter_by(email=user_email).first()
+
+    print(user.Address)
+    if user is None or user.Address is None:
+        
+        return generate_response(
+        message="User has no address saved", status=HTTP_404_NOT_FOUND
+    )
+    
+    print(user)
+    print(user.Address)
+
+    user_address_id = user.Address
+    user_address = Address.query.filter_by(AddressID=user_address_id).first()
+    print(type(user_address))
+    print(type(user_email))
+    json_address = {
+        "FirstName": user_address.FirstName,
+        "LastName": user_address.LastName,
+        "Country": user_address.Country,
+        "City": user_address.City,
+        "StreetName": user_address.StreetName,
+        "StreetNo": user_address.StreetNo,
+        "AppartmentNo": user_address.AppartmentNo,
+        "PostCode": user_address.PostCode
+    }
+    
+    return generate_response(
+    data=json_address, message="User address found", status=HTTP_202_ACCEPTED)
+        
+def save_user_address(input_data):
+        
+        user_email = input_data.get("Email")
+        del input_data["Email"]
+
+        #Find user with this emial
+        user = User.query.filter_by(email=user_email).first()
+        print(user.Userid)
+
+        if(user.Address is None):
+            print("[save_user_address] there is no address to be deleted")
+        else:
+            #Find current address saved in db and delete it
+            oldAddress = Address.query.filter_by(AddressID=user.Address).first()
+            db.session.delete(oldAddress)
+            db.session.commit()
+            #Delete also address from user
+            user.Address = None
+            db.session.commit()
+
+
+        #Save to DB new address
+        new_user_address = Address()  # Create an instance of the User class
+        new_user_address = Address()
+        new_user_address.FirstName = input_data.get("FirstName")
+        new_user_address.LastName = input_data.get("LastName")
+        new_user_address.StreetName = input_data.get("StreetName")
+        new_user_address.StreetNo = input_data.get("StreetNo")
+        new_user_address.AppartmentNo = input_data.get("AppartmentNo")
+        new_user_address.PostCode = input_data.get("PostCode")
+        new_user_address.City = input_data.get("City")
+        new_user_address.Country = input_data.get("Country")
+
+        print(new_user_address)
+
+        db.session.add(new_user_address)  # Adds new User record to database
+        db.session.commit()  # Comment
+
+        last_address = Address.query.order_by(Address.AddressID.desc()).first()
+
+        #connect address to the user
+        user.Address = last_address.AddressID
+        db.session.commit()
+
+        # AddressID = db.Column(db.Integer, primary_key=True)
+        # FirstName = db.Column(db.String(50))
+        # LastName = db.Column(db.String(50))
+        # Country = db.Column(db.String(50))
+        # City = db.Column(db.String(50))
+        # StreetName = db.Column(db.String(50))
+        # StreetNo = db.Column(db.Integer)
+        # AppartmentNo = db.Column(db.String(10))
+        # PostCode = db.Column(db.Integer)
+
+        # {'First Name': 'John', 
+        #  'Last Name': 'Doe', 
+        #  'Street Name': 'Main Street', 
+        #  'Street Number': 123, 
+        #  'Postal Code': 10001, 
+        #  'Phone Number': '234234234', 
+        #  'City': 'New York', 
+        #  'Country': 'USA', 
+        #  'Email': 'blabla@gmail.com'}

@@ -28,7 +28,7 @@
       { 
         delete values.confirmPassword;
         // alert(JSON.stringify(values));
-        fetch("http://127.0.0.1:5000/register", {
+        fetch("http://127.0.0.1:5000/api/auth/register/", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -37,9 +37,10 @@
         })
         .then(response => {
           if (!response.ok) {
-            if(response.status === 409){
+            if(response.status === 400){
               response.json().then(data => {
-                formErrors.email = data.msg;
+                formErrors.email = data.message;
+                console.log(data);
               });
               document.getElementById("email").className = errorBorder;
             }
@@ -128,7 +129,7 @@
 <main class="flex justify-center items-center page-body">
   <div class="login-form">
     <Card class="mx-auto">
-      <h4 class="text-2xl font-bold mb-6 text-center">Sign Up</h4>
+      <h4 class="text-2xl font-bold mb-6 text-center">Rejestracja</h4>
       <div class="flex flex-col ">
         <div class="mb-6">
           <Label for="default-input" class="block mb-2">Email</Label>
@@ -144,7 +145,7 @@
           {/if}
         </div>
         <div class="mb-6">
-          <Label for="default-input" class="block mb-2">Password</Label>
+          <Label for="default-input" class="block mb-2">Hasło</Label>
           <Input 
             id="password" 
             placeholder="password" 
@@ -156,7 +157,7 @@
             {/if}
         </div>
         <div class="mb-6">
-          <Label  id="confirmedPass-label" for="default-input" class="block mb-2">Confirm password</Label>
+          <Label  id="confirmedPass-label" for="default-input" class="block mb-2">Powtórz hasło</Label>
           <Input 
             id="confirmPassword" 
             placeholder="confirm password" 
@@ -167,7 +168,7 @@
           <p class="text-xs font-bold text-red-600">{formErrors.confirmPassword}</p>
           {/if}
         </div>
-        <Button id="registerBtn" class="text-center w-2/3 self-center" color="dark" on:click={()=>{handleSubmit()}}>Sign Up</Button>
+        <Button id="registerBtn" class="text-center w-2/3 self-center" color="blue" on:click={()=>{handleSubmit()}}>Zarejestruj się</Button>
       </div>
     </Card>
   </div>
