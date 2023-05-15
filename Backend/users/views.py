@@ -88,3 +88,8 @@ class GetProducts(Resource):
     def get():
         products = get_products()
         return {'products': products}, 200
+    
+class Health(Resource):
+    @staticmethod
+    def get():
+        return {'health': 'ok'}, 200

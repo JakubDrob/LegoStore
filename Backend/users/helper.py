@@ -1,8 +1,7 @@
 import os
 from flask_mail import Message
 from utils.common import TokenGenerator
-from server import mail
-
+# from app import mail
 
 def send_forgot_password_email(request, user):
     """
@@ -19,4 +18,4 @@ def send_forgot_password_email(request, user):
         mail_subject, sender=os.environ.get("EMAIL_HOST_USER"), recipients=[user.email]
     )
     msg.html = f"Please click on the link to reset your password, {domain}/pages/auth/reset-password/{uid}/{token}"
-    mail.send(msg)
+    # mail.send(msg)

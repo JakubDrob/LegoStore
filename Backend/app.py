@@ -14,13 +14,12 @@ from flask_migrate import Migrate
 
 
 #db = SQLAlchemy()
-mail = Mail()
+# mail = Mail()
 
 def create_app():
     """Construct the core application."""
     app = Flask(__name__, instance_relative_config=False)
     CORS(app)
-    mail = Mail(app)
 
     # This is the configuration for the email server.
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -32,8 +31,6 @@ def create_app():
 
     # Configuration for db
     app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
-
-    mail = Mail(app)
 
     app.config.from_object("config.Config")
 
@@ -52,9 +49,8 @@ def create_app():
         # db.create_all()  # Create database tables for our data models
 
         return app
-
-
+    
+app = create_app();
 
 if __name__ == "__main__":
-    app = create_app()
     app.run(host="0.0.0.0", port=5000)
