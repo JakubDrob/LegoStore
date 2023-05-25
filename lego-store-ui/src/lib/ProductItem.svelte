@@ -29,5 +29,9 @@
 
     .img-wrapper > img{
         object-fit: contain;
+        float: left;
+        width:  450px;
+        height: 350px;
+        object-fit: cover;
     }
 </style>

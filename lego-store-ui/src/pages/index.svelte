@@ -1,41 +1,43 @@
-<script>
+<script lang="ts">
     // import Carousel from '../components/Carousel.svelte';
-    import { Carousel } from 'flowbite-svelte'
+    import Carousel from '../lib/Carousel.svelte'
+    import Banner from '../lib/Banner.svelte'
     import { Card } from "flowbite-svelte";
-    import { CarouselTransition } from 'flowbite-svelte'
-    import { bounceInOut, backInOut, cubicInOut } from 'svelte/easing';
-  
+
     let showThumbs = false;
     let showCaptions = false;
     let border = true;
 
     const images = [
-        {id: 0,
-        name: "Cosmic timetraveler",
-        imgurl: "1.webp",
-        attribution: "cosmic-timetraveler-pYyOZ8q7AII-unsplash.com",
+        {title: 'Nintendo',
+        src: "1.webp"
         },
-        {id: 1,
-        name: "Cosmic timetraveler",
-        imgurl: "3.webp",
-        attribution: "cosmic-timetraveler-pYyOZ8q7AII-unsplash.com",
+        {title: 'Pasta store',
+        src: "pastaStore.webp"
+        },
+        {title: 'Mario world',
+        src: "2.webp"
+        },
+        {title: 'Restaurant',
+        src: "foodTruck.webp"
         },
     ];
 
+    const banner = {src:"indianaJonesAdd.webp"}
+
   </script>
   
-  <main class="flex justify-center w-screen page-body">
-    <Card size = "xl" vertical class="h-96 w-full mt-10 bg-opacity-60 bg-black">
-        <div class="flex justify-center">
-            <h2 class="text-2xl text-white font-bold">Nowości !</h2>
-        </div>
-        <CarouselTransition {images} transitionType="slide" transitionParams="{{duration: 1000, easing: cubicInOut}}" showCaptions={false} showThumbs={false}/>
-        <!-- <Carousel {images} {border} loop {showThumbs} {showCaptions} duration="3000"/> -->
-      </Card>
-  </main>
-  
+<svelte:head>
+    <title>Scelte Carousel</title>
+</svelte:head>
 
-  <style>
+<section class ="flex flex-col item-center px-8 pt-10 page-body">
+
+    <Carousel {images}/>
+    <Banner {banner}/>
+</section>
+  
+<style>
     .page-body {
       background-image:  url('../assets/background.jpg');
       background-repeat: no-repeat;
