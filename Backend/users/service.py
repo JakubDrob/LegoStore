@@ -25,17 +25,29 @@ def create_user(request, input_data):
     :param input_data: This is the data that is passed to the function
     :return: A response object
     """
+    isAdmin = False
 
     check_email_exist = User.query.filter_by(email=input_data.get("email")).first()
     if check_email_exist:
         return generate_response(
             message="Email  already taken", status=HTTP_400_BAD_REQUEST
         )
+    
+    if (len(input_data['adminPassword']) != 0):
+        if input_data['adminPassword'] != "12345":
+            return generate_response(
+                message="Wrong admin password", status=HTTP_400_BAD_REQUEST
+            )
+        else:
+            isAdmin = True
 
+    input_data['adminPassword'] = isAdmin
     new_user = User(**input_data)  # Create an instance of the User class
     new_user.hash_password()
     db.session.add(new_user)  # Adds new User record to database
     db.session.commit()  # Comment
+
+    print(new_user)
     del input_data["password"]
     return generate_response(
         data=input_data, message="User Created", status=HTTP_201_CREATED
@@ -64,6 +76,13 @@ def login_user(request, input_data):
             environ.get("SECRET_KEY"),
         )
         input_data["token"] = token
+
+        if(get_user.isAdmin == True):
+            input_data["admin"] = True
+        else:
+            input_data["admin"] = False
+
+
         return generate_response(
             data=input_data, message="User login successfully", status=HTTP_201_CREATED
         )

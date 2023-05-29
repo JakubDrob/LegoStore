@@ -77,6 +77,12 @@ const { form, handleChange, handleSubmit } = createForm({
         console.log('Success:', data);
         const jwt = data.data['token'];
         const responseEmail = data.data['email'];
+        if(data.data['admin'] == true){
+            setCookie('isAdmin', true, {
+            path: '/',
+            httpOnly: true
+          });
+        }
 
         // Save the token to httpOnly cookie
         setCookie('jwt', jwt, {
@@ -86,6 +92,12 @@ const { form, handleChange, handleSubmit } = createForm({
         });
 
         setCookie('email', responseEmail, {
+          path: '/',
+          httpOnly: true
+        });
+
+
+        setCookie('isLoggedIn', true, {
           path: '/',
           httpOnly: true
         });

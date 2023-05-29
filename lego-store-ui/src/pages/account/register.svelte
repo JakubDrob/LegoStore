@@ -1,18 +1,20 @@
 <script lang="ts">
   import { redirect, goto } from "@roxi/routify";
-  import { Button, Card, Input, Label } from "flowbite-svelte";
+  import { Button, Card, Checkbox, Input, Label } from "flowbite-svelte";
   import { createForm } from "svelte-forms-lib";
 
   const errorBorder = "bg-gray-50 border-2 border-rose-600 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ";
   const correctBorder = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 
   let formErrors = {};
+  let adminCheckbox: boolean = false;
 
   const { form, handleChange, handleSubmit } = createForm({
     initialValues: {
       email: "",
       password: "",
       confirmPassword: "",
+      adminPassword: ""
     },
     validate: (values) => {
     /**************************************
@@ -26,7 +28,9 @@
      **************************************/
       if(!formErrors.email && (!formErrors.password) && (!formErrors.confirmPassword))
       { 
+        console.log(values);
         delete values.confirmPassword;
+        if(!adminCheckbox) values.adminPassword = "";
         // alert(JSON.stringify(values));
         fetch("http://127.0.0.1:5000/api/auth/register/", {
           method: 'POST',
@@ -39,10 +43,20 @@
           if (!response.ok) {
             if(response.status === 400){
               response.json().then(data => {
-                formErrors.email = data.message;
-                console.log(data);
+                if(data.message.includes("admin")){
+                  formErrors.adminPassword = data.message;
+                  console.log("admin error");
+                  console.log(data);
+                  document.getElementById("adminPassword").className = errorBorder;
+                }
+                else{
+                  console.log("email error");
+                  formErrors.email = data.message;
+                  console.log(data);
+                  document.getElementById("email").className = errorBorder;
+                }
+
               });
-              document.getElementById("email").className = errorBorder;
             }
             else{
               throw new Error('Network response was not ok');
@@ -167,6 +181,22 @@
           {#if formErrors.confirmPassword}
           <p class="text-xs font-bold text-red-600">{formErrors.confirmPassword}</p>
           {/if}
+        </div>
+        {#if adminCheckbox}
+          <div class="mb-6">
+            <Label  id="confirmedPass-label" for="default-input" class="block mb-2">Hasło administracyjne</Label>
+            <Input 
+              id="adminPassword" 
+              type="password" 
+              on:input={handleChange}
+            />
+            {#if formErrors.adminPassword}
+            <p class="text-xs font-bold text-red-600">{formErrors.adminPassword}</p>
+            {/if}
+          </div>
+          {/if}
+        <div class="pb-4">
+          <Checkbox bind:checked={adminCheckbox}>Zarejestruj konto administratora</Checkbox>
         </div>
         <Button id="registerBtn" class="text-center w-2/3 self-center" color="blue" on:click={()=>{handleSubmit()}}>Zarejestruj się</Button>
       </div>
