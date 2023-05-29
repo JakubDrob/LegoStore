@@ -11,9 +11,9 @@
     }
 </script>
 
-<Card class="w-full">
+<Card class="w-full h-fit">
     <div class="img-wrapper">
-        <img class="p-8" src={product.image_path} alt="product 1" />
+        <img class="p-8" src={product.image} alt="product 1" />
     </div>
     <div>
         <div>{product.name}</div>

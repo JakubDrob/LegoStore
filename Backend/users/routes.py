@@ -17,3 +17,6 @@ def create_authentication_routes(api: Api):
     api.add_resource(UserShoppingCart, "/users/<string:user_id>/cart")
     api.add_resource(ChangeShoppingCartQuantity, "/users/<string:user_id>/cart/<string:product_id>/quantity")
     api.add_resource(Health, "/health")
+    api.add_resource(AddProduct, "/addProduct")
+    api.add_resource(SearchProducts,"/products/search/")
+
