@@ -14,6 +14,8 @@ class SignUpApi(Resource):
         :return: JSON object
         """
         input_data = request.get_json()
+
+        print(input_data)
         response, status = create_user(request, input_data)
         return make_response(response, status)
 
@@ -93,3 +95,15 @@ class Health(Resource):
     @staticmethod
     def get():
         return {'health': 'ok'}, 200
+
+class AddProduct(Resource):
+    @staticmethod
+    def post():
+        
+        input_data = request.get_json()
+        # print(input_data)
+        return add_product(input_data)
+
+        # products = get_products()
+        # return {'message': "ok"}, 200
+    

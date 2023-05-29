@@ -15,3 +15,5 @@ def create_authentication_routes(api: Api):
     api.add_resource(ResetPassword, "/api/auth/reset-password/<token>")
     api.add_resource(GetProducts, "/products")
     api.add_resource(Health, "/health")
+    api.add_resource(AddProduct, "/addProduct")
+

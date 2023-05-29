@@ -17,6 +17,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import jsonify
 from config import Config
+import base64
+from io import BytesIO
+import binascii
+from azure.storage.blob import BlobServiceClient
 
 def create_user(request, input_data):
     """
@@ -243,3 +247,69 @@ def get_products():
                     'product_type_id': row.ProductTypeID}
         converted_result.append(dict_row)
     return converted_result
+
+def add_product(input_data):
+    
+    # blob = base64_to_blob(input_data["Image"])
+
+    upload_image(input_data["Image"])
+
+    input_data["Image"] = "bla"
+
+    # new_product = Product(**input_data)  # Create an instance of the User class
+    # # new_product.hash_password()
+    # db.session.add(new_product)  # Adds new User record to database
+    # db.session.commit()  # Comment
+
+    return generate_response(
+    data=input_data, message="Product Created", status=HTTP_201_CREATED
+    )
+
+def base64_to_blob(base64_string):
+    decoded_bytes = base64.b64decode(base64_string)
+
+    # Return the bytes as BLOB using binascii
+    return binascii.a2b_hex(binascii.hexlify(decoded_bytes))
+
+
+def upload_image(image_file):
+    blob_name = "bla"
+
+    # Azure Blob Storage connection string
+    connection_string = 'DefaultEndpointsProtocol=https;AccountName=csb1003200066accade;AccountKey=A5qnWwOWTe5pXK3M8RqS8YGFazGZW2NtIWDc+i1vJC1kPNAz3dFhNHYG15CuChAnh2OElpti5yjT+ASt7grt2A==;EndpointSuffix=core.windows.net'
+
+    # Create a BlobServiceClient
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Get the blob container
+    container_name = 'blobs'
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Upload the image file as a blob
+    blob_client = container_client.get_blob_client(blob_name)
+    blob_client.upload_blob(image_file)
+
+    return 'Image uploaded successfully'
+
+def read_blob(blob_name):
+    # Azure Blob Storage connection string
+    connection_string = 'DefaultEndpointsProtocol=https;AccountName=csb1003200066accade;AccountKey=A5qnWwOWTe5pXK3M8RqS8YGFazGZW2NtIWDc+i1vJC1kPNAz3dFhNHYG15CuChAnh2OElpti5yjT+ASt7grt2A==;EndpointSuffix=core.windows.net'
+
+    container_name = 'blobs'
+
+    # Create a BlobServiceClient
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Get a reference to the blob container
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Get a reference to the blob
+    blob_client = container_client.get_blob_client(blob_name)
+
+    # Download the blob
+    blob_data = blob_client.download_blob()
+
+    # Read the blob data
+    blob_content = blob_data.readall()
+
+    return blob_content
