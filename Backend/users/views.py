@@ -88,3 +88,11 @@ class GetProducts(Resource):
     def get():
         products = get_products()
         return {'products': products}, 200
+    
+class SearchProducts(Resource):
+    @staticmethod
+    def post():
+        input_data = request.get_json()
+        print(input_data)
+
+        return {'message': "OK"}, 200
