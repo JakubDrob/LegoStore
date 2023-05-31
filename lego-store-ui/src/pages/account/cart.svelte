@@ -7,40 +7,37 @@
     } from "flowbite-svelte";
     import CartItemQuantity from "../../lib/CartItemQuantity.svelte";
     import { goto } from "@roxi/routify";
+    import { decrementCartItem, getCart, incrementCartItem } from "../../lib/services";
+    import type { Cart, CartItem } from "../../lib/models";
 
-    let cart = {
-        items: [
-            {
-                productId: 1,
-                title: "Lego Nintendo",
-                quantity: 3,
-                image:"1.webp",
-                price: 55.55
-            },
-            {
-                productId: 2,
-                title: "Lego restauracja Ramen",
-                quantity: 1,
-                image:"restaurant.webp",
-                price: 89.99
-            },
-            {
-                productId: 3,
-                title: "Lego sklep surferski",
-                quantity: 1,
-                image:"surfStore.webp",
-                price: 39.99
-            },
-        ],
-    };
+    let cart: Cart;
 
-    function onItemQuantityIncreased(productId: number, quantity: number){
-        console.log({productId, quantity})
+    getCart(1)
+    .then(x => {
+        cart = x;
+        price = calculatePrice()
+    })
+
+    function onItemQuantityIncreased(item: CartItem, quantity: number){
+        incrementCartItem(1, item.productId);
+        item.quantity += 1;
+        price = calculatePrice();
     }
 
-    function onItemQuantityDescreased(productId: number, quantity: number){
-        console.log({productId, quantity})
+    function onItemQuantityDecreased(item: CartItem, quantity: number){
+        decrementCartItem(1, item.productId);
+        item.quantity -= 1;
+        price = calculatePrice();
+        if(quantity == 0){
+            cart.items = cart.items.filter(x => x.productId !== item.productId);
+        }
     }
+
+    function calculatePrice(){
+        return cart?.items?.map((x) => x.quantity * x.price).reduce((sum, x) => sum + x, 0).toFixed(2) ?? 0
+    }
+
+    let price = calculatePrice();
 </script>
 
 <main class="w-full justify-items-center">
@@ -48,24 +45,26 @@
         <div class="col-span-2 w-full">
             <Card size="xl">
                 <h5 class="text-xl font-bold">Twój Koszyk:</h5>
-                <Listgroup items={cart.items} let:item class="border-0 dark:!bg-transparent">
-                    <div class="w-full flex">
-                        <Avatar src="/{item.image}" alt="" size="lg" rounded class="flex-shrink-0"/>
-                        <div class="flex w-full justify-between items-center">
-                            <div class="flex flex-col justify-center mx-5 gap-2">
-                                <h5>{item.title}</h5>
-                                <p>{item.price} zł</p>
+                {#if cart && cart.items.length !== 0}
+                    <Listgroup items={cart.items} let:item class="border-0 dark:!bg-transparent">
+                        <div class="w-full flex">
+                            <Avatar src="/{item.image}" alt="" size="lg" rounded class="flex-shrink-0"/>
+                            <div class="flex w-full justify-between items-center">
+                                <div class="flex flex-col justify-center mx-5 gap-2">
+                                    <h5>{item.title}</h5>
+                                    <p>{item.price} zł</p>
+                                </div>
+                                <CartItemQuantity value={item.quantity} on:increment={q => onItemQuantityIncreased(item, q.detail.value)} on:decrement={q => onItemQuantityDecreased(item, q.detail.value)}/>
                             </div>
-                            <CartItemQuantity value={item.quantity} on:increment={q => onItemQuantityIncreased(item.productId, q.detail.value)} on:decrement={q => onItemQuantityDescreased(item.productId, q.detail.value)}/>
                         </div>
-                    </div>
-                </Listgroup>
+                    </Listgroup>
+                {/if}
             </Card>
         </div>
         <div>
             <Card class="summary-panel" size="xl">
                 <h5 class="font-bold text-2xl my-2">Podsumowanie zamówienia</h5>
-                <p class="my-2">Kwota zamówienia: 55.99 zł</p>
+                <p class="my-2">Kwota zamówienia: {price} zł</p>
                 <Button class="my-2" on:click={()=>{$goto('./shippingAddress');}}>
                     <svg
                         aria-hidden="true"

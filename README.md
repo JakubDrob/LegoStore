@@ -30,7 +30,7 @@ pnpm dev
 Run MySQL instance:
 
 ```shell
-docker run --name mysql -d `
+docker run --name lego-mysql -d `
     -p 3306:3306 `
     -e MYSQL_ROOT_PASSWORD=change-me `
     --restart unless-stopped `

@@ -224,3 +224,54 @@ def get_products():
                     'product_type_id': row.ProductTypeID}
         converted_result.append(dict_row)
     return converted_result
+
+def get_user_shopping_cart(user_id: int):
+    
+    user: User = User.query.filter_by(Userid=user_id).first()
+
+    result = ShoppingCartItem.query.filter_by(ShoppingCartId=user.ShoppingCartID).all()
+
+    converted_result = []
+    for row in result:
+        product = Product.query.filter_by(ProductID=row.ProductId).first()
+        dict_row = {
+            'productId': product.ProductID,
+            'title': product.Name,
+            'quantity': row.Quantity,
+            'image': product.ImagePath,
+            'price': product.Price
+        }
+        converted_result.append(dict_row)
+    return converted_result
+
+def increase_shopping_cart_quantity(user_id: int, product_id: int):
+    user: User = User.query.filter_by(Userid=user_id).first()
+
+    result: ShoppingCartItem = ShoppingCartItem.query.filter_by(ShoppingCartId=user.ShoppingCartID, ProductId=product_id).first()
+
+    result.Quantity += 1
+
+    db.session.commit()
+
+def decrease_shopping_cart_quantity(user_id: int, product_id: int):
+    user: User = User.query.filter_by(Userid=user_id).first()
+
+    result: ShoppingCartItem = ShoppingCartItem.query.filter_by(ShoppingCartId=user.ShoppingCartID, ProductId=product_id).first()
+
+    if(result.Quantity == 1):
+        db.session.delete(result)
+    result.Quantity -= 1
+
+    db.session.commit()
+
+def add_product_to_shopping_cart(user_id: int, product_id: int):
+    user: User = User.query.filter_by(Userid=user_id).first()
+
+    cart_item = ShoppingCartItem()
+    cart_item.ProductId = product_id,
+    cart_item.ShoppingCartId = user.ShoppingCartID
+    cart_item.Quantity = 1
+
+    db.session.add(cart_item)
+
+    db.session.commit()

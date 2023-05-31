@@ -1,9 +1,14 @@
 <script lang="ts">
     import { Button, Card } from "flowbite-svelte";
     import type { Product } from "./models";
+    import { createEventDispatcher } from "svelte";
 
     export let product: Product
+    const dispatchAddedToCart = createEventDispatcher<{addedToCart: {productId: number}}>();
+    function addToCart(){
+        dispatchAddedToCart('addedToCart', { productId: product.id });
 
+    }
 </script>
 
 <Card class="w-full">
@@ -16,7 +21,7 @@
             <span class="font-bold">{product.price} zł</span>
         </div>
         <div>
-            <Button>Dodaj do koszyka</Button>
+            <Button on:click={addToCart} >Dodaj do koszyka</Button>
         </div>
     </div>
 </Card>
