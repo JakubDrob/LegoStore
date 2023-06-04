@@ -4,6 +4,7 @@
     import { redirect, goto } from "@roxi/routify";
     import { validate_component } from "svelte/internal";
     import { setCookie, getCookie } from 'svelte-cookie';
+    import { Toast } from 'flowbite-svelte';
     
     let stripe = null
     
@@ -14,6 +15,7 @@
     let avatar;
     let fileinput;
     let isEmptyAvatar = false;
+    let notification = false;
 
     // console.log("Avatar: ", avatar);
     
@@ -52,12 +54,20 @@
             })
             .then(data => {
                 console.log('Success:', data);
+                for (var i in info) {
+                    info[i] = "";
+                }
+                avatar = undefined;
+                showSuccessNotification();
+                
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         }
     }
+
+
     
     function isAnyBoxEmpty() {
         let grid = document.getElementById("grid");
@@ -65,7 +75,11 @@
         let isEmpty = false;
     
         for (var infoField in info) {
-            if (infoField == "Image" || infoField == "Availability" || infoField == "Description") continue;
+            if (infoField == "Image" || infoField == "Availability" || infoField == "Description") 
+            {
+                i++;
+                continue;
+            }
     
             if (info[infoField] == "") {
                 console.log(infoField, info[infoField])
@@ -102,11 +116,25 @@
                 avatar = e.target.result
                 // console.log(avatar);
             };
-}
+    }
+
+    async function showSuccessNotification()
+    {
+        console.log(notification);
+        notification = true;
+        await delay(2000);
+        console.log(notification);
+        notification = false;
+    }
+
+    function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+    }
 </script>
 
 <main class="flex p-10 page-body justify-center items-center w-full">
     <Card class="w-9/12 min-h-fit min-w-fit">
+        <!-- <Button on:click={bla}> Test</Button> -->
         <h4 class="text-2xl font-bold mb-6 text-center">Dane produktu</h4>
         <form>
             <div id="grid" class="grid gap-6 mb-1 md:grid-cols-2">
@@ -162,7 +190,7 @@
                     <label for="release_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Data wydania</label>
                     <input 
                         bind:value={info["ReleaseDate"]}
-                        bind:this={inputFields[5]}
+                        bind:this={inputFields[6]}
                         type="date" 
                         id="release_date" 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
@@ -174,7 +202,7 @@
                     <label for="piece_count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Liczba elementów</label>
                     <input 
                         bind:value={info["PieceCount"]}
-                        bind:this={inputFields[6]}
+                        bind:this={inputFields[7]}
                         type="number" 
                         id="piece_count" 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
@@ -186,7 +214,7 @@
                     <label for="product_type_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Typ produktu</label>
                     <select 
                         bind:value={info["ProductTypeID"]}
-                        bind:this={inputFields[7]}
+                        bind:this={inputFields[8]}
                         id="product_type_id" 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         required
@@ -206,7 +234,7 @@
                         {/if}
                         <input style="display:none" type="file" accept=".webp, .jpg, .jpeg, .png" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
                         {#if isEmptyAvatar}
-                            <p class = "text-xs font-semibold text-red-700"> Photo is required !</p>
+                            <p class = "text-xs font-semibold text-red-700"> Zdjęcie jest wymagane !</p>
                         {/if}
                 
                 </div>
@@ -229,6 +257,17 @@
             <img class="avatar" src="{avatar}" alt="d" />
             {/if}
         </div>
+        {#if notification}
+        <div class = "flex justify-center">
+            <Toast color="green">
+                <svelte:fragment slot="icon">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Check icon</span>
+                </svelte:fragment>
+                Przedmiot dodany do bazy
+            </Toast>
+        </div>
+        {/if}
 
         <div class="mt-6">
             <Button 

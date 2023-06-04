@@ -69,7 +69,7 @@ class Product(db.Model):
     SetNo = db.Column(db.String(50), nullable=False)
     Price = db.Column(db.String(50), nullable=False)
     Description = db.Column(db.String(250), nullable=False)
-    Image = db.Column(db.LargeBinary)
+    Image = db.Column(db.String(50), nullable = False)
     Availability = db.Column(db.Integer, nullable=False)
     ReleaseDate = db.Column(db.Date, nullable=False)
     PieceCount = db.Column(db.Integer, nullable=False)

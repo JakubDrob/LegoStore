@@ -13,7 +13,7 @@
         console.log(x)
         products = x;
         console.log(products)
-        console.log(products[0].image_path)
+        // console.log(products[0].image)
     })
 
 </script>

@@ -235,12 +235,14 @@ def get_products():
     result =  Product.query.all()
     converted_result = []
     for row in result:
+        image = read_blob(row.Image)
+
         dict_row = {'id': row.ProductID,
                     'name': row.Name,
                     'set_no': row.SetNo,
                     'price': row.Price,
                     'description': row.Description,
-                    'image_path': row.ImagePath if row.ImagePath is not None else "",
+                    'image': image.decode("utf-8"),
                     'availability': row.Availability,
                     'release_date': datetime.datetime.strftime(row.ReleaseDate, "%Y-%m-%d"),
                     'piece_count': row.PieceCount,
@@ -252,28 +254,21 @@ def add_product(input_data):
     
     # blob = base64_to_blob(input_data["Image"])
 
-    upload_image(input_data["Image"])
+    upload_image(input_data["Image"], input_data["Name"])
 
-    input_data["Image"] = "bla"
+    input_data["Image"] = input_data["Name"]
 
-    # new_product = Product(**input_data)  # Create an instance of the User class
-    # # new_product.hash_password()
-    # db.session.add(new_product)  # Adds new User record to database
-    # db.session.commit()  # Comment
+    new_product = Product(**input_data)  # Create an instance of the User class
+    db.session.add(new_product)  # Adds new User record to database
+    db.session.commit()  # Comment
 
     return generate_response(
     data=input_data, message="Product Created", status=HTTP_201_CREATED
     )
 
-def base64_to_blob(base64_string):
-    decoded_bytes = base64.b64decode(base64_string)
 
-    # Return the bytes as BLOB using binascii
-    return binascii.a2b_hex(binascii.hexlify(decoded_bytes))
-
-
-def upload_image(image_file):
-    blob_name = "bla"
+def upload_image(image_file, file_name):
+    blob_name = file_name
 
     # Azure Blob Storage connection string
     connection_string = 'DefaultEndpointsProtocol=https;AccountName=csb1003200066accade;AccountKey=A5qnWwOWTe5pXK3M8RqS8YGFazGZW2NtIWDc+i1vJC1kPNAz3dFhNHYG15CuChAnh2OElpti5yjT+ASt7grt2A==;EndpointSuffix=core.windows.net'
