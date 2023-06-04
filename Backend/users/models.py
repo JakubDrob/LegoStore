@@ -211,3 +211,23 @@ class BuyingHistory(db.Model):
         self.user_id = kwargs.get("user_id")
         self.shopping_cart_id = kwargs.get("shopping_cart_id")
         self.date_of_purchase = kwargs.get("date_of_purchase")
+
+class Tag(db.Model):
+    __tablename__ = "tag"
+    TagID = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, **kwargs):
+        self.Name = kwargs.get("Name")
+
+class Product_Tag(db.Model):
+
+    __tablename__="product_tag"
+    ProductTagID = db.Column(db.Integer, primary_key=True)
+    ProductID = db.Column(db.Integer, db.ForeignKey("product.ProductID"))
+    TagID =  db.Column(db.Integer, db.ForeignKey("tag.TagID"))
+
+    def __init__(self, **kwargs):
+
+        self.ProductID = kwargs.get("product_id")
+        self.TagID = kwargs.get("tag_id")

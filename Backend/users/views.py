@@ -106,4 +106,14 @@ class AddProduct(Resource):
 
         # products = get_products()
         # return {'message': "ok"}, 200
+
+class SearchProducts(Resource):
+    @staticmethod
+    def post():
+        input_data = request.get_json()
+        print(input_data)
+
+        products = get_products_by_tag(input_data["searchPhrase"])
+
+        return {'products': products}, 200
     

@@ -308,3 +308,38 @@ def read_blob(blob_name):
     blob_content = blob_data.readall()
 
     return blob_content
+
+import json
+
+def get_products_by_tag(tag_name):
+    tag = Tag.query.filter_by(Name=tag_name).first()
+
+    print("Found tag: ", tag.Name)
+
+    if not tag:
+        return []
+
+    product_tag_ids = Product_Tag.query.filter_by(TagID=tag.TagID).all()
+    product_ids = [pt.ProductID for pt in product_tag_ids]
+
+    products = Product.query.filter(Product.ProductID.in_(product_ids)).all()
+
+    print(products)
+    converted_result = []
+    for row in products:
+        image = read_blob(row.Image)
+
+        dict_row = {'id': row.ProductID,
+                    'name': row.Name,
+                    'set_no': row.SetNo,
+                    'price': row.Price,
+                    'description': row.Description,
+                    'image': image.decode("utf-8"),
+                    'availability': row.Availability,
+                    'release_date': datetime.datetime.strftime(row.ReleaseDate, "%Y-%m-%d"),
+                    'piece_count': row.PieceCount,
+                    'product_type_id': row.ProductTypeID}
+
+        converted_result.append(dict_row)
+
+    return converted_result
