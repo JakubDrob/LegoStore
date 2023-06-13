@@ -14,6 +14,8 @@ let saveAddressCheckBox = false;
 //TEST
 let email = "blabla@gmail.com"
 
+let inputClass = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
+
 let info = {
 "FirstName":"",
 "LastName":"",
@@ -63,7 +65,7 @@ function getAddressData(){
         });
 }
 
-function saveAddress(){
+function finalizePayment(){
     if(isAnyBoxEmpty()){
         return;
     }
@@ -208,7 +210,36 @@ function isAnyBoxEmpty(){
             <hr class="w-120 h-2 t-20 ">
             <h4 class="text-2xl font-bold mb-6 text-center">Dane do płatności</h4>
 
-            <Button on:click={()=>{saveAddress()}} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Kontynuuj</Button>
+            <form>
+              <input class={inputClass} type="text" name="card" id="card" placeholder="1234 5678 9012 3456">
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" 
+                for="text">Numer karty
+              </label>
+              <div id="grid" class="grid gap-6 mb-1 md:grid-cols-2">
+                <div>
+                  <input class = {inputClass} type="text" placeholder="MM/RR">
+                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="text">Data waźności
+                  </label>
+                </div>
+                <div>
+                  <input class = {inputClass} type="number" placeholder="123">
+                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="text">CCV
+                  </label>
+                </div>
+              </div>
+            </form>
+
+            {#if info["FirstName"] != "" && info["LastName"]!="" && info["StreetName"]!="" && info["AppartmentNo"] != "" && info["City"] != "" && info["PostCode"] != "" }
+              <hr class="w-52 h-1 t-20 ">
+              <h3 class="py-3 text-gray-900"> Adres rozliczeniowy</h3>
+              <p class="text-gray-600 text-sm ">{info["FirstName"]} {info["LastName"]},</p>
+              <p class="text-gray-600 text-sm">{info["StreetName"]} {info["StreetNo"]} m.{info["AppartmentNo"]},</p>
+              <p class="text-gray-600 text-sm pb-8">{info["City"]}, {info["PostCode"]}</p>
+            {/if}
+
+            <Button on:click={()=>{finalizePayment()}} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Kontynuuj</Button>
         </form>
     </Card>
 </main>

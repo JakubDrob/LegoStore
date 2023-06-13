@@ -17,6 +17,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import jsonify
 from config import Config
+import base64
+from io import BytesIO
+import binascii
+from azure.storage.blob import BlobServiceClient
 
 def create_user(request, input_data):
     """
@@ -231,12 +235,14 @@ def get_products():
     result =  Product.query.all()
     converted_result = []
     for row in result:
+        image = read_blob(row.Image)
+
         dict_row = {'id': row.ProductID,
                     'name': row.Name,
                     'set_no': row.SetNo,
                     'price': row.Price,
                     'description': row.Description,
-                    'image_path': row.ImagePath if row.ImagePath is not None else "",
+                    'image': image.decode("utf-8"),
                     'availability': row.Availability,
                     'release_date': datetime.datetime.strftime(row.ReleaseDate, "%Y-%m-%d"),
                     'piece_count': row.PieceCount,
@@ -294,3 +300,96 @@ def add_product_to_shopping_cart(user_id: int, product_id: int):
     db.session.add(cart_item)
 
     db.session.commit()
+def add_product(input_data):
+    
+    # blob = base64_to_blob(input_data["Image"])
+
+    upload_image(input_data["Image"], input_data["Name"])
+
+    input_data["Image"] = input_data["Name"]
+
+    new_product = Product(**input_data)  # Create an instance of the User class
+    db.session.add(new_product)  # Adds new User record to database
+    db.session.commit()  # Comment
+
+    return generate_response(
+    data=input_data, message="Product Created", status=HTTP_201_CREATED
+    )
+
+
+def upload_image(image_file, file_name):
+    blob_name = file_name
+
+    # Azure Blob Storage connection string
+    connection_string = 'DefaultEndpointsProtocol=https;AccountName=csb1003200066accade;AccountKey=A5qnWwOWTe5pXK3M8RqS8YGFazGZW2NtIWDc+i1vJC1kPNAz3dFhNHYG15CuChAnh2OElpti5yjT+ASt7grt2A==;EndpointSuffix=core.windows.net'
+
+    # Create a BlobServiceClient
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Get the blob container
+    container_name = 'blobs'
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Upload the image file as a blob
+    blob_client = container_client.get_blob_client(blob_name)
+    blob_client.upload_blob(image_file)
+
+    return 'Image uploaded successfully'
+
+def read_blob(blob_name):
+    # Azure Blob Storage connection string
+    connection_string = 'DefaultEndpointsProtocol=https;AccountName=csb1003200066accade;AccountKey=A5qnWwOWTe5pXK3M8RqS8YGFazGZW2NtIWDc+i1vJC1kPNAz3dFhNHYG15CuChAnh2OElpti5yjT+ASt7grt2A==;EndpointSuffix=core.windows.net'
+
+    container_name = 'blobs'
+
+    # Create a BlobServiceClient
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Get a reference to the blob container
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Get a reference to the blob
+    blob_client = container_client.get_blob_client(blob_name)
+
+    # Download the blob
+    blob_data = blob_client.download_blob()
+
+    # Read the blob data
+    blob_content = blob_data.readall()
+
+    return blob_content
+
+import json
+
+def get_products_by_tag(tag_name):
+    tag = Tag.query.filter_by(Name=tag_name).first()
+
+    print("Found tag: ", tag.Name)
+
+    if not tag:
+        return []
+
+    product_tag_ids = Product_Tag.query.filter_by(TagID=tag.TagID).all()
+    product_ids = [pt.ProductID for pt in product_tag_ids]
+
+    products = Product.query.filter(Product.ProductID.in_(product_ids)).all()
+
+    print(products)
+    converted_result = []
+    for row in products:
+        image = read_blob(row.Image)
+
+        dict_row = {'id': row.ProductID,
+                    'name': row.Name,
+                    'set_no': row.SetNo,
+                    'price': row.Price,
+                    'description': row.Description,
+                    'image': image.decode("utf-8"),
+                    'availability': row.Availability,
+                    'release_date': datetime.datetime.strftime(row.ReleaseDate, "%Y-%m-%d"),
+                    'piece_count': row.PieceCount,
+                    'product_type_id': row.ProductTypeID}
+
+        converted_result.append(dict_row)
+
+    return converted_result

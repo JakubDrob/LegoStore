@@ -69,7 +69,7 @@ class Product(db.Model):
     SetNo = db.Column(db.String(50), nullable=False)
     Price = db.Column(db.String(50), nullable=False)
     Description = db.Column(db.String(250), nullable=False)
-    ImagePath = db.Column(db.String(255))
+    Image = db.Column(db.String(50), nullable = False)
     Availability = db.Column(db.Integer, nullable=False)
     ReleaseDate = db.Column(db.Date, nullable=False)
     PieceCount = db.Column(db.Integer, nullable=False)
@@ -80,7 +80,7 @@ class Product(db.Model):
         self.SetNo = kwargs.get("SetNo")
         self.Price = kwargs.get("Price")
         self.Description = kwargs.get("Description")
-        self.ImagePath = kwargs.get("ImagePath")
+        self.Image = kwargs.get("Image")
         self.Availability = kwargs.get("Availability")
         self.ReleaseDate = kwargs.get("ReleaseDate")
         self.PieceCount = kwargs.get("PieceCount")
@@ -219,3 +219,23 @@ class BuyingHistory(db.Model):
         self.user_id = kwargs.get("user_id")
         self.shopping_cart_id = kwargs.get("shopping_cart_id")
         self.date_of_purchase = kwargs.get("date_of_purchase")
+
+class Tag(db.Model):
+    __tablename__ = "tag"
+    TagID = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, **kwargs):
+        self.Name = kwargs.get("Name")
+
+class Product_Tag(db.Model):
+
+    __tablename__="product_tag"
+    ProductTagID = db.Column(db.Integer, primary_key=True)
+    ProductID = db.Column(db.Integer, db.ForeignKey("product.ProductID"))
+    TagID =  db.Column(db.Integer, db.ForeignKey("tag.TagID"))
+
+    def __init__(self, **kwargs):
+
+        self.ProductID = kwargs.get("product_id")
+        self.TagID = kwargs.get("tag_id")
