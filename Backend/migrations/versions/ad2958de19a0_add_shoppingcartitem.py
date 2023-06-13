@@ -1,7 +1,7 @@
 """Add_ShoppingCartItem
 
 Revision ID: ad2958de19a0
-Revises: a68efc2385d5
+Revises: e14611d57860
 Create Date: 2023-05-31 22:43:18.899828
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'ad2958de19a0'
-down_revision = 'a68efc2385d5'
+down_revision = 'e14611d57860'
 branch_labels = None
 depends_on = None
 
