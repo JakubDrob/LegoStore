@@ -176,7 +176,15 @@ class ShoppingCart_Product(db.Model):
         """
         self.shopping_cart_id = kwargs.get("shopping_cart_id")
         self.product_id = kwargs.get("product_id")
-        self.set_id = kwargs.get("set_id")
+
+class ShoppingCartItem(db.Model):
+    """Data model for shopping cart item."""
+    __tablename__ = "shopping_cart_item"
+
+    Id = db.Column(db.Integer, primary_key=True)
+    ShoppingCartId = db.Column(db.Integer, db.ForeignKey("shopping_cart.ShoppingCartID"))
+    ProductId = db.Column(db.Integer, db.ForeignKey("product.ProductID"))
+    Quantity = db.Column(db.Integer)
 
 class Set_Product(db.Model):
     """Data model for set products."""

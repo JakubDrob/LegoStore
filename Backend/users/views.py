@@ -89,6 +89,31 @@ class GetProducts(Resource):
         products = get_products()
         return {'products': products}, 200
     
+class UserShoppingCart(Resource):
+    @staticmethod
+    def get(user_id):
+        items = get_user_shopping_cart(user_id)
+        return {'items': items}, 200
+    
+    @staticmethod
+    def post(user_id):
+        input_data = request.get_json()
+        print(input_data)
+        add_product_to_shopping_cart(user_id, input_data["productId"])
+        return 200
+    
+class ChangeShoppingCartQuantity(Resource):
+    @staticmethod
+    def post(user_id, product_id):
+        increase_shopping_cart_quantity(user_id, product_id)
+        return 200
+    
+    @staticmethod
+    def delete(user_id, product_id):
+        decrease_shopping_cart_quantity(user_id, product_id)
+        return 200
+
+    
 class Health(Resource):
     @staticmethod
     def get():

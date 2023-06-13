@@ -2,7 +2,7 @@
     import { Card } from "flowbite-svelte";
     import type { Product } from "../../lib/models";
     import ProductItem from "../../lib/ProductItem.svelte";
-    import { getProducts } from "../../lib/services";
+    import { addProductToCart, getProducts } from "../../lib/services";
 
     let products: Product[] = [];
 
@@ -16,11 +16,15 @@
         console.log(products[0].image_path)
     })
 
+    async function addToCart(id: number){
+        await addProductToCart(1, id);
+    }
+
 </script>
 
 <main class="grid gap-8 lg:grid-cols-3 w-full pt-5 justify-items-center page-body">
     {#each products as item}
-        <ProductItem product={item} />
+        <ProductItem product={item} on:addedToCart={p => addToCart(p.detail.productId)} />
     {/each}
 </main>
 
