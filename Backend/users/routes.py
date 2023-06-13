@@ -1,4 +1,4 @@
-from flask_restful import Api
+from flask_restx import Api
 from users.views import *
 
 

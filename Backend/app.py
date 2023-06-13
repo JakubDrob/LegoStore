@@ -2,7 +2,6 @@
 """Initialize Flask app."""
 import os
 from flask import Flask, jsonify
-from flask_restful import Api
 from flask_mail import Mail
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -11,7 +10,9 @@ from database import db
 from flask_cors import CORS
 from config import Config
 from flask_migrate import Migrate
-
+from flask_openapi3 import Info, Tag
+from flask_openapi3 import OpenAPI
+from flask_restx import Api
 
 #db = SQLAlchemy()
 # mail = Mail()
@@ -20,6 +21,8 @@ def create_app():
     """Construct the core application."""
     app = Flask(__name__, instance_relative_config=False)
     CORS(app)
+
+    
 
     # This is the configuration for the email server.
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -34,8 +37,8 @@ def create_app():
 
     app.config.from_object("config.Config")
 
-    api = Api(app=app)
 
+    api = Api(app, version='1.0', title='Leo API', description='A Lego API',)
     from users.routes import create_authentication_routes
 
     create_authentication_routes(api=api)
