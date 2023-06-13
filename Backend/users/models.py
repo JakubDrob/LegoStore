@@ -13,6 +13,7 @@ class User(db.Model):
     password = db.Column(db.String(500), nullable=False)
     ShoppingCartID = db.Column(db.Integer)
     Address = db.Column(db.Integer)
+    isAdmin = db.Column(db.Boolean)
 
     def __init__(self, **kwargs):
         """
@@ -21,6 +22,8 @@ class User(db.Model):
         """
         self.email = kwargs.get("email")
         self.password = kwargs.get("password")
+        self.isAdmin = kwargs.get("adminPassword")
+        print("isAdmin: ", self.isAdmin)
 
 
     def __repr__(self):
