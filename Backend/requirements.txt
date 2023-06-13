@@ -1,5 +1,7 @@
 alembic==1.10.4
 aniso8601==9.0.1
+azure-core==1.26.4
+azure-storage-blob==12.16.0
 bcrypt==4.0.1
 blinker==1.6.2
 cffi==1.15.1
@@ -29,3 +31,4 @@ six==1.16.0
 SQLAlchemy==2.0.12
 typing_extensions==4.5.0
 Werkzeug==2.3.3
+
