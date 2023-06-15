@@ -26,10 +26,6 @@
     const banner = {src:"indianaJonesAdd.webp"}
 
   </script>
-  
-<svelte:head>
-    <title>Scelte Carousel</title>
-</svelte:head>
 
 <section class ="flex flex-col item-center px-8 pt-10 page-body">
 

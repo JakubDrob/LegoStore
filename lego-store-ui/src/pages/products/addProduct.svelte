@@ -38,7 +38,7 @@
         else{
             info["Image"] = avatar;
             console.log("SAVING....")
-            fetch("http://127.0.0.1:5000/addProduct", {
+            fetch("http://legostorebackend.azurewebsites.net/addProduct", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

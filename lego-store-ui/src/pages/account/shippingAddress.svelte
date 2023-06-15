@@ -34,7 +34,7 @@ onMount(async () => {
 });
 
 function getAddressData(){
-    fetch("http://127.0.0.1:5000/api/cart/getAddress/", {
+    fetch("http://legostorebackend.azurewebsites.net/api/cart/getAddress/", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ function finalizePayment(){
     {
         console.log("SAVING....")
         info['Email'] = email;
-        fetch("http://127.0.0.1:5000/api/cart/saveAddress/", {
+        fetch("http://legostorebackend.azurewebsites.net/api/cart/saveAddress/", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

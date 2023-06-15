@@ -51,7 +51,7 @@ const { form, handleChange, handleSubmit } = createForm({
     if((!formErrors.email) && (!formErrors.password))
     { 
       // alert(JSON.stringify(values));
-      fetch("http://127.0.0.1:5000/api/auth/login/", {
+      fetch("http://legostorebackend.azurewebsites.net/api/auth/login/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
