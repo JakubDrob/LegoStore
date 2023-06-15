@@ -10,8 +10,6 @@ from database import db
 from flask_cors import CORS
 from config import Config
 from flask_migrate import Migrate
-from flask_openapi3 import Info, Tag
-from flask_openapi3 import OpenAPI
 from flask_restx import Api
 
 #db = SQLAlchemy()
