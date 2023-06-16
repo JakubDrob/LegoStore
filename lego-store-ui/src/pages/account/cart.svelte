@@ -48,7 +48,7 @@
                 {#if cart && cart.items.length !== 0}
                     <Listgroup items={cart.items} let:item class="border-0 dark:!bg-transparent">
                         <div class="w-full flex">
-                            <Avatar src="/{item.image}" alt="" size="lg" rounded class="flex-shrink-0"/>
+                            <Avatar src="{item.image}" alt="" size="lg" rounded class="flex-shrink-0"/>
                             <div class="flex w-full justify-between items-center">
                                 <div class="flex flex-col justify-center mx-5 gap-2">
                                     <h5>{item.title}</h5>

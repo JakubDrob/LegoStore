@@ -259,11 +259,12 @@ def get_user_shopping_cart(user_id: int):
     converted_result = []
     for row in result:
         product = Product.query.filter_by(ProductID=row.ProductId).first()
+        image = read_blob(product.Image)
         dict_row = {
             'productId': product.ProductID,
             'title': product.Name,
             'quantity': row.Quantity,
-            'image': product.ImagePath,
+            'image': image.decode("utf-8"),
             'price': product.Price
         }
         converted_result.append(dict_row)
