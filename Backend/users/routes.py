@@ -6,7 +6,7 @@ def create_authentication_routes(api: Api):
     """Adds resources to the api.
     :param api: Flask-RESTful Api Object
     """
-    api.add_resource(ShowUser, '/users', '/users/<string:user_id>')
+    api.add_resource(ShowUser, '/users/<string:user_id>')
     api.add_resource(SignUpApi, "/api/auth/register/")
     api.add_resource(LoginApi, "/api/auth/login/")
     api.add_resource(GetAddress, "/api/cart/getAddress/")

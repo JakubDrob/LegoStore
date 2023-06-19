@@ -36,7 +36,7 @@ def create_app():
     app.config.from_object("config.Config")
 
 
-    api = Api(app, version='1.0', title='Leo API', description='A Lego API',)
+    api = Api(app, version='1.0', title='Lego API', description='A Lego API',)
     from users.routes import create_authentication_routes
 
     create_authentication_routes(api=api)
